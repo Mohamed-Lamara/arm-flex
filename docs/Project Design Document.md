@@ -48,9 +48,9 @@ The project must comply with the following constraints:
 
 # 5. System Structure & Behavioral Model
 ### Block Diagram
-![Block Diagram](docs/architecture/block-diagram.png)
+![Block Diagram](architecture/block-diagram.png)
 ### State Machine
-![State Machine](docs/architecture/state-machine.png)
+![State Machine](architecture/state-machine.png)
 *note:* Internal boxes represent actions triggered by events; they are not standalone states.
 
 # 6. Software Architecture & Module Responsibilities
@@ -60,7 +60,7 @@ The software architecture is designed to be minimal and capability-driven, avoid
 - Display is driven via GPIO multiplexing and managed using a separate module for simplicity
 - Battery monitoring via ADC
 ### Software Architecture
-![Software Architecture](docs/architecture/software-architecture.png)
+![Software Architecture](architecture/software-architecture.png)
 ### Module Responsibilities
 #### A - Drivers
 - MCU Init
