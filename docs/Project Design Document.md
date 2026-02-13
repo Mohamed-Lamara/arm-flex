@@ -1,14 +1,14 @@
 ---
-Project Name: Trainer's PIC
-Document Version: "1.0"
+Project Name: ARM Flex
+Document Version: "1.1"
 Author: Mohamed Lamara Ouzrourou
 Date: Jan 20, 2026
 Status: Work in Progress (as of Feb 3)
 Repo link: https://github.com/Mohamed-Lamara/trainers-pic
 ---
-# Trainer's PIC
+# ARM Flex
 # 1. Project Overview & Goals
-This project's intent is to design and develop an embedded system powered by a PIC microcontroller. The resulting device will function as a **Training Assistant,** serving as a personal training tool and a platform to practice embedded systems design and development.
+This project's intent is to design and develop a **Training Assistant embedded system**, serving as a personal training tool and a platform to practice embedded systems design and development.
 # 2. System Capabilities
 As for the first version, this system will be capable of:
 - allowing the user to set repetitions (reps for short) and rest time
@@ -143,15 +143,14 @@ All non-critical processing executes cooperatively in the main loop, including:
 # 8. Hardware Decisions
 ### Microcontroller
 
-**PIC16F877A (Microchip, DIP package)**  
+**STM32F103C8T6 “Blue Pill” (STMicroelectronics, 48-pin LQFP, breadboard-compatible form factor)**  
 
-Selected due to immediate availability and compatibility with PICkit 3. It satisfies compute, memory, and I/O requirements for the current system architecture. Main limitation is its dated architecture; however, this is acceptable for a personal project and leaves room for a future migration to a modern MCU to evaluate product-grade feasibility.
+Selected for its cost-effective performance, sufficient GPIO and ADC channels, and broad community and ST support. The Cortex-M3 core provides higher performance, enabling efficient handling of current tasks while offering room for future enhancements and more advanced projects. Additionally, learning STM32 builds ARM expertise directly relevant to modern embedded systems, making it an essential skill for my career.
 ### Power and Battery
 
-**Rechargeable Li-Ion 18650 with charger IC and boost converter**  
+**Rechargeable Li-Ion 18650 with charger IC**  
 
-Chosen for availability and sufficient energy density. Provides a regulated rail suitable for MCU operation. Primary tradeoff is increased system complexity and potential safety risks, which must be mitigated through proper charging, protection, and power-path design.
-This configuration may be changed in future updates.
+Chosen for availability and sufficient energy density. Provides a regulated rail suitable for MCU operation. Primary tradeoff is careful handling of the Li-Ion cell to prevent overcharge, overdischarge, or short circuits, which must be mitigated through proper charging and protection design.
 ### Sensor
 
 **Hall-effect sensor module (KY-024)**  
@@ -159,7 +158,7 @@ This configuration may be changed in future updates.
 Provides both analog and digital outputs, enabling flexibility for current and future firmware revisions. Its simplicity and modular form reduce integration effort. Tradeoff lies in mechanical placement and signal interpretation, which must be carefully addressed to reliably detect and count repetitions.
 ### Display
 
-**4-digit common-cathode multiplexed 7-segment display**  
+**3-digit common-cathode multiplexed 7-segment display**  
 
 Offers a compact, power-efficient output solution with low I/O usage. Multiplexing introduces timing constraints but remains well within MCU capabilities and is preferable to discrete 7-segment implementations.
 ### User Input and Indicators
