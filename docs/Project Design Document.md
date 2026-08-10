@@ -3,8 +3,8 @@ Project Name: ARM Flex
 Document Version: "1.1"
 Author: Mohamed Lamara Ouzrourou
 Date: Jan 20, 2026
-Status: Work in Progress (as of Feb 3)
-Repo link: https://github.com/Mohamed-Lamara/trainers-pic
+Status: Work in Progress (as of Jul 26)
+Repo link: https://github.com/Mohamed-Lamara/arm-flex
 ---
 # ARM Flex
 # 1. Project Overview & Goals
@@ -51,6 +51,7 @@ The project must comply with the following constraints:
 ![Block Diagram](architecture/block-diagram.png)
 ### State Machine
 ![State Machine](architecture/state-machine.png)
+
 *note:* Internal boxes represent actions triggered by events; they are not standalone states.
 
 # 6. Software Architecture & Module Responsibilities
@@ -81,8 +82,12 @@ The software architecture is designed to be minimal and capability-driven, avoid
 	- Exposes primitive drawing / update functions
 - ADC
 	- Configures ADC peripheral and channels
-	- Performs raw analog-to-digital conversions
 	- Manages calibration and reference voltage
+	- Performs raw analog-to-digital conversions
+- UART
+	- Initializes and configures the USART peripheral (baud rate, transmitter/receiver, GPIO alternate functions)
+	- Provides functions for transmitting and receiving serial data
+	- Supports firmware debugging and diagnostics through serial communication
 #### B - Application Layer
 - State Machine (FSM)
 	- Acts as the central decision-making logic
@@ -143,7 +148,7 @@ All non-critical processing executes cooperatively in the main loop, including:
 # 8. Hardware Decisions
 ### Microcontroller
 
-**STM32F103C8T6 “Blue Pill” (STMicroelectronics, 48-pin LQFP, breadboard-compatible form factor)**  
+**STM32F103C8T6 “Blue Pill”**  
 
 Selected for its cost-effective performance, sufficient GPIO and ADC channels, and broad community and ST support. The Cortex-M3 core provides higher performance, enabling efficient handling of current tasks while offering room for future enhancements and more advanced projects. Additionally, learning STM32 builds ARM expertise directly relevant to modern embedded systems, making it an essential skill for my career.
 ### Power and Battery
@@ -158,7 +163,7 @@ Chosen for availability and sufficient energy density. Provides a regulated rail
 Provides both analog and digital outputs, enabling flexibility for current and future firmware revisions. Its simplicity and modular form reduce integration effort. Tradeoff lies in mechanical placement and signal interpretation, which must be carefully addressed to reliably detect and count repetitions.
 ### Display
 
-**3-digit common-cathode multiplexed 7-segment display**  
+**4-digit common-cathode multiplexed 7-segment display**  
 
 Offers a compact, power-efficient output solution with low I/O usage. Multiplexing introduces timing constraints but remains well within MCU capabilities and is preferable to discrete 7-segment implementations.
 ### User Input and Indicators
@@ -179,12 +184,14 @@ The strategy for verifying the functionality and performance of the system is pe
 - Dedicated test firmware per driver
 - UART logs for status and values
 - Logic analyzer for timing-critical signals (timer tick, display multiplex)
+
 **Pass criteria:**  Correct functionality and stable operation for ≥ 2 minutes
 ### 2) Module-Integration
 **Goal:** Drivers and application modules interact reliably  
 **Procedures:**
 - Execute functional chains (sensor → processing → display)
 - Stress inputs and worst-case loads
+
 **Pass criteria:** No missed events, freezes, or visible artifacts
 ### 3) System Tests
 **Goal:** Meets the system requirements set in section 3  
@@ -192,6 +199,7 @@ The strategy for verifying the functionality and performance of the system is pe
 - Full operational scenarios
 - Long continuous run
 - Reset and startup test
+
 **Pass criteria:** Correct outputs, stable behavior, no unintended resets
 ### 4) Power Monitoring
 **Goal:** Supply remains stable under all operating conditions  
@@ -199,6 +207,7 @@ The strategy for verifying the functionality and performance of the system is pe
 - Measure idle and active current
 - Measure rail voltage under load
 - Inspect ripple/brownout with oscilloscope when available
+
 **Pass criteria:** Voltage within limits, no brownout or instability
 # 10. Version Strategy
 I will be using this version format: v**X.Y** where:
