@@ -23,6 +23,7 @@
  *   the configured debounce interval.
  ******************************************************************************/
 
+#include "drivers/init.h"
 #include "drivers/gpio.h"
 #include "drivers/timer.h"
 #include "drivers/uart.h"
@@ -30,6 +31,7 @@
 
 int main(void)
 {
+    MCU_Init();
     GPIO_Init();
     Timer_Init();
     UART_Init();
