@@ -80,6 +80,11 @@ The software architecture is designed to be minimal and capability-driven, avoid
 	- Manages low-level display operations
 	- Handles multiplexing, refresh, and clearing
 	- Exposes primitive drawing / update functions
+- External Interrupt (EXTI)
+	- Configures external interrupt lines for event-driven GPIO inputs
+	- Configures interrupt edge detection and interrupt generation
+	- Provides the interrupt mechanism used by the repetition sensor
+	- Keeps interrupt handling hardware-specific and separate from application logic
 - ADC
 	- Configures ADC peripheral and channels
 	- Manages calibration and reference voltage
@@ -101,6 +106,7 @@ The software architecture is designed to be minimal and capability-driven, avoid
 		- Timed-mode training duration tracking
 - Sensor
 	- Monitors repetition sensor input during training
+	- Receives repetition events captured by the EXTI interrupt.
 	- Filters and validates sensor readings
     - Generates events for the FSM
 - User Input

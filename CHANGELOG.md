@@ -20,12 +20,27 @@
 ## v0.2 - August 10th
 
 ### Added
-- Added the current firmware source and driver implementation.
-- Added hardware/KiCad project files.
-- Added firmware test files.
+- Current firmware source and driver implementation.
+- Hardware/KiCad project files.
+- Firmware test files.
 
 ### Changed
 - Synchronized the local ARM Flex project with the GitHub repository.
+
+### Fixed
+- None.
+
+### Removed
+- None.
+
+## v0.2 - August 12th
+
+### Added
+- "EXTI" driver module to the Software Architecture
+- "EXTI" section in Module Responsibility in the PDD
+
+### Changed
+- Modified the software-architecture.png diagram
 
 ### Fixed
 - None.
