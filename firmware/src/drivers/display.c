@@ -21,26 +21,32 @@ enum
     SEG_G = (1U << 6)
 };
 
+// Segment pattern for the minus sign
+#define SEG_MINUS    SEG_G
+
 // Segment patterns for decimal digits 0-9
 static const uint8_t segmentMap[DISPLAY_NUMBERS] =
 {
-    SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F,                 // 0
-    SEG_B | SEG_C,                                                 // 1
-    SEG_A | SEG_B | SEG_D | SEG_E | SEG_G,                         // 2
-    SEG_A | SEG_B | SEG_C | SEG_D | SEG_G,                         // 3
-    SEG_B | SEG_C | SEG_F | SEG_G,                                 // 4
-    SEG_A | SEG_C | SEG_D | SEG_F | SEG_G,                         // 5
-    SEG_A | SEG_C | SEG_D | SEG_E | SEG_F | SEG_G,                 // 6
-    SEG_A | SEG_B | SEG_C,                                         // 7
-    SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F | SEG_G,         // 8
-    SEG_A | SEG_B | SEG_C | SEG_D | SEG_F | SEG_G                  // 9
+    SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F,         // 0
+    SEG_B | SEG_C,                                         // 1
+    SEG_A | SEG_B | SEG_D | SEG_E | SEG_G,                 // 2
+    SEG_A | SEG_B | SEG_C | SEG_D | SEG_G,                 // 3
+    SEG_B | SEG_C | SEG_F | SEG_G,                         // 4
+    SEG_A | SEG_C | SEG_D | SEG_F | SEG_G,                 // 5
+    SEG_A | SEG_C | SEG_D | SEG_E | SEG_F | SEG_G,         // 6
+    SEG_A | SEG_B | SEG_C,                                 // 7
+    SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F | SEG_G, // 8
+    SEG_A | SEG_B | SEG_C | SEG_D | SEG_F | SEG_G          // 9
 };
 
+// Stores segment patterns for the four display digits
 static uint8_t displayBuffer[DISPLAY_DIGITS] = {0U};
+
 static uint8_t firstVisibleDigit = 0U;
 static uint8_t currentDigit = 0U;
 static uint8_t displayEnabled = 0U;
 
+// Displays a decimal number from 0 to 9999
 void Display_SetNumber(uint16_t value)
 {
     // Saturate if value is over the maximum
@@ -52,7 +58,7 @@ void Display_SetNumber(uint16_t value)
     // Split the number into individual decimal digits
     for (int i = DISPLAY_DIGITS - 1; i >= 0; i--)
     {
-        displayBuffer[i] = value % 10U;
+        displayBuffer[i] = segmentMap[value % 10U];
         value /= 10U;
     }
 
@@ -62,7 +68,11 @@ void Display_SetNumber(uint16_t value)
 
     while (firstVisibleDigit < (DISPLAY_DIGITS - 1U))
     {
-        if (displayBuffer[firstVisibleDigit] != 0U)
+        // Check whether this digit is displaying zero.
+        //
+        // Since the buffer now contains segment patterns,
+        // compare against the pattern for zero.
+        if (displayBuffer[firstVisibleDigit] != segmentMap[0])
         {
             break;
         }
@@ -73,6 +83,23 @@ void Display_SetNumber(uint16_t value)
     displayEnabled = 1U;
 }
 
+// Displays a minus sign on the first digit
+void Display_SetMinus(void)
+{
+    // Clear all digits
+    for (uint8_t i = 0U; i < DISPLAY_DIGITS; i++)
+    {
+        displayBuffer[i] = 0U;
+    }
+
+    // Place the minus sign on the first digit
+    displayBuffer[0] = SEG_MINUS;
+
+    firstVisibleDigit = 0U;
+    displayEnabled = 1U;
+}
+
+// Initializes the display
 void Display_Init(void)
 {
     Display_Clear();
@@ -80,6 +107,7 @@ void Display_Init(void)
     currentDigit = 0U;
 }
 
+// Refreshes the currently active digit
 void Display_Update(void)
 {
     // Disable all digits before changing the segment pattern
@@ -98,7 +126,7 @@ void Display_Update(void)
     }
     else
     {
-        Display_SetSegments(segmentMap[displayBuffer[currentDigit]]);
+        Display_SetSegments(displayBuffer[currentDigit]);
     }
 
     // Enable only the current digit
@@ -114,6 +142,7 @@ void Display_Update(void)
     }
 }
 
+// Clears the display
 void Display_Clear(void)
 {
     // Disable all digits immediately
@@ -123,7 +152,7 @@ void Display_Clear(void)
     Display_SetSegments(0U);
 
     // Clear the display buffer
-    for (int i = DISPLAY_DIGITS - 1; i >= 0; i--)
+    for (uint8_t i = 0U; i < DISPLAY_DIGITS; i++)
     {
         displayBuffer[i] = 0U;
     }
