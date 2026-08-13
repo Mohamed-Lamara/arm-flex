@@ -83,20 +83,15 @@ void Display_SetNumber(uint16_t value)
     displayEnabled = 1U;
 }
 
-// Displays a minus sign on the first digit
-void Display_SetMinus(void)
+// Displays a minus sign on a desired position
+void Display_SetMinus(uint8_t position)
 {
-    // Clear all digits
-    for (uint8_t i = 0U; i < DISPLAY_DIGITS; i++)
+    if (position >= DISPLAY_DIGITS)
     {
-        displayBuffer[i] = 0U;
+        return;
     }
 
-    // Place the minus sign on the first digit
-    displayBuffer[0] = SEG_MINUS;
-
-    firstVisibleDigit = 0U;
-    displayEnabled = 1U;
+    displayBuffer[position] = SEG_MINUS;
 }
 
 // Initializes the display

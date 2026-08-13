@@ -5,7 +5,7 @@
 
 void Display_Init(void);
 void Display_SetNumber(uint16_t value);
-void Display_SetMinus(void);
+void Display_SetMinus(uint8_t position);
 void Display_Clear(void);
 void Display_Update(void);
 
